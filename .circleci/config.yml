@@ -29,20 +29,21 @@ jobs:
       - run: DEBUG=app node app.js
       - store_artifacts:
           path: yarn.lock
-# workflows:
-#   version: 2
-#   test-and-deploy:
-#     jobs:
-#       - test
-#       - build_site:
-#           filters:
-#             branches:
-#               only:
-#                 - /release.*/
-#                 - master
-#       - deploy_site:
-#           filters:
-#             branches:
-#               only:
-#                 - /release.*/
-#                 - master
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - mac_build
+      - linux_build
+      # - build_site:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - /release.*/
+      #           - master
+      # - deploy_site:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - /release.*/
+      #           - master
