@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  mac_build:
+    environment: NODE_ENV=production
+    macos:
+      xcode: 10.1.0
+    steps:
+      - checkout
+      - run: wget https://raw.githubusercontent.com/tj/n/master/bin/n
+      - run: chmod +x n
+      - run: n 10.13.0
+      - run:
+          name: install deps
+          command: yarn
+      - run: DEBUG=app node app.js
+      - store_artifacts:
+          path: yarn.lock
+
+  linux_build:
+    working_directory: ~/code
+    environment: NODE_ENV=production
+    docker:
+      - image: circleci/node:10.11.0-stretch
+    steps:
+      - checkout
+      - run:
+          name: install deps
+          command: yarn
+      - run: DEBUG=app node app.js
+      - store_artifacts:
+          path: yarn.lock
+# workflows:
+#   version: 2
+#   test-and-deploy:
+#     jobs:
+#       - test
+#       - build_site:
+#           filters:
+#             branches:
+#               only:
+#                 - /release.*/
+#                 - master
+#       - deploy_site:
+#           filters:
+#             branches:
+#               only:
+#                 - /release.*/
+#                 - master
